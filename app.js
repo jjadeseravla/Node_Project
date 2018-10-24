@@ -5,6 +5,10 @@ var path = require('path');
 
 var app = express();
 
+//view engine
+// app.set('view engine', 'html');
+// app.set('views', path.join(__dirname, 'views'));
+
 //body parser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -13,7 +17,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.get('/', function(req, res) {
-  res.send('hello world');
+  res.render(index);
 });
 
 app.listen(3000, function() {
