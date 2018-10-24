@@ -1,0 +1,24 @@
+{
+  "name": "Jade Node_Project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jjadeseravla/Node_Project.git"
+  },
+  "author": "Jade",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jjadeseravla/Node_Project/issues"
+  },
+  "homepage": "https://github.com/jjadeseravla/Node_Project#readme",
+  "dependencies": {
+    "body-parser": "*",
+    "express": "*",
+    "nodemon": "^1.18.4"
+  }
+}
