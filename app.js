@@ -70,8 +70,14 @@ app.post('/users/add', function(req, res) {
       email: req.body.email,
       country: req.body.country
     }
-    console.log('success');
-    console.log(newUser);
+    db.users.insert(newUser, function(err, res){
+      if(err){
+        console.log(err);
+      }
+        //res.render(newUser);
+        res.redirect('/');
+      
+    })
   }
 });
 
