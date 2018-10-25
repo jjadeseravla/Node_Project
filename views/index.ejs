@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>view page</title>
+  </head>
+  <body>
+    <h1>This is my Node Project View</h1>
+    <% if(errors) { %>
+    <ul>
+      <% errors.forEach(function(error){ %>
+        <li><%= error.msg %><li>
+      <% }) %>
+      <ul>
+    <% } %>
+
+    <form action="/users/add" method="POST">
+      <label>Name</label>
+      <input type="text" name="name">
+      <br><br>
+      <label>Email</label>
+      <input type="text" name="email">
+      <br><br>
+      <label>Country</label>
+      <input type="text" name="country">
+      <br><br>
+      <input type="submit" value="Submit">
+    </form>
+  </body>
+</html>

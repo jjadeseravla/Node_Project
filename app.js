@@ -7,8 +7,8 @@ var expressValidator = require('express-validator');
 var app = express();
 
 //view engine
-// app.set('view engine', 'html');
-// app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 //body parser middleware
 app.use(bodyParser.json());
@@ -16,6 +16,12 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 //set static path
 app.use(express.static(path.join(__dirname, 'public')))
+
+//global Vars
+app.use(function(req, res, next){
+  res.locals.errors = null;
+  next();
+});
 
 //express validator middleware
 app.use(expressValidator({
@@ -36,7 +42,7 @@ app.use(expressValidator({
 }));
 
 app.get('/', function(req, res) {
-  res.render(index);
+  res.render('index');
 });
 
 app.post('/users/add', function(req, res) {
@@ -47,7 +53,9 @@ app.post('/users/add', function(req, res) {
 
   var errors = req.validationErrors();
   if(errors){
-    console.log('errors');
+    res.render('index', {
+      errors: errors
+    });
   } else {
     var newUser = {
       name: req.body.name,
