@@ -46,7 +46,10 @@ app.get('/', function(req, res) {
   db.users.find(function(err, docs){
     //array for docs in collection
     console.log(docs);
-    res.render('index');
+    res.render('index', {
+      title: 'People',
+      users: docs
+    });
   })
 });
 
