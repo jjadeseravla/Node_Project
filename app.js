@@ -20,17 +20,17 @@ app.use(express.static(path.join(__dirname, 'public')))
 //express validator middleware
 app.use(expressValidator({
   errorFormatter: function(param, msg, value) {
-    var namespace = param.split('.')
-    , root = namespace.shift()
-    , formParam = root;
+      var namespace = param.split('.')
+      , root    = namespace.shift()
+      , formParam = root;
 
     while(namespace.length) {
       formParam += '[' + namespace.shift() + ']';
     }
     return {
-      param: formParam,
-      msg: msg,
-      value: value
+      param : formParam,
+      msg   : msg,
+      value : value
     };
   }
 }));
@@ -41,18 +41,21 @@ app.get('/', function(req, res) {
 
 app.post('/users/add', function(req, res) {
 
-  req.checkBody('name', 'name is required').notEmpty;
-  req.checkBody('email', 'email is required').notEmpty;
+  req.checkBody('name', 'name is required').notEmpty();
+  req.checkBody('email', 'email is required').notEmpty();
+  req.checkBody('country', 'country is required').notEmpty();
 
   var errors = req.validationErrors();
   if(errors){
     console.log('errors');
   } else {
     var newUser = {
-      name : req.body.name,
-      email : req.body.email
+      name: req.body.name,
+      email: req.body.email,
+      country: req.body.country
     }
     console.log('success');
+    console.log(newUser);
   }
 });
 
