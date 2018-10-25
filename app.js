@@ -46,9 +46,9 @@ app.use(expressValidator({
 app.get('/', function(req, res) {
   db.users.find(function(err, docs){
     //array for docs in collection
-    console.log(docs);
+    //console.log(docs);
     res.render('index', {
-      title: 'People',
+      //title: 'People',
       users: docs
     });
   })
@@ -71,7 +71,7 @@ app.post('/users/add', function(req, res) {
       email: req.body.email,
       country: req.body.country
     }
-    db.users.insert(newUser, function(err, res){
+    db.users.insert(newUser, function(err, result){
       if(err){
         console.log(err);
       }
