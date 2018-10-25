@@ -2,7 +2,8 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var path = require('path');
 var expressValidator = require('express-validator');
-
+var mongojs = require('mongojs');
+var db = mongojs('projectnode', ['users'])
 
 var app = express();
 
@@ -42,7 +43,11 @@ app.use(expressValidator({
 }));
 
 app.get('/', function(req, res) {
-  res.render('index');
+  db.users.find(function(err, docs){
+    //array for docs in collection
+    console.log(docs);
+    res.render('index');
+  })
 });
 
 app.post('/users/add', function(req, res) {
