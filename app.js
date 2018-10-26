@@ -54,6 +54,13 @@ app.get('/', function(req, res) {
   })
 });
 
+//another page (route)
+app.get('/other/page', function(req, res){
+  res.render('extra', {
+    title: 'Extra Page'
+  });
+});
+
 app.post('/users/add', function(req, res) {
 
   req.checkBody('name', 'name is required').notEmpty();
