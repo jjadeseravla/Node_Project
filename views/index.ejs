@@ -3,13 +3,20 @@
   <head>
     <meta charset="utf-8">
     <title>view page</title>
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css"> 
     <script
   src="https://code.jquery.com/jquery-3.3.1.js"
   integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
   crossorigin="anonymous"></script>
   <script src="js/main.js"></script>
+
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+
   </head>
   <body>
+
+  <% include navbar %>
+    <div class="container">
     <h1>This is my Node Project View</h1>
     <% if(errors) { %>
     <ul>
@@ -31,11 +38,13 @@
       <br><br>
       <input type="submit" value="Submit">
     </form>
+    <br>
 
-    <ul>
+    <ul class="list-group">
     <% users.forEach(function(user){ %>
-      <li><%= user.name %> <a href="#" class="deleteUser" data-id="<%= user._id%>">Delete</li>
+      <li class="list-group-item"><%= user.name %> <a href="#" class="deleteUser" data-id="<%= user._id%>">Delete</li>
     <% }) %>
   </ul>
+</div>
   </body>
 </html>
