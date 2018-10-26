@@ -78,6 +78,15 @@ app.get('/', function(req, res) {
   // })
 });
 
+//get single users
+app.get('/user/:id', function(req, res){
+  User.findById(req.params.id, function(err, user) { //in brackets to get id thats in URL use req.params
+    res.render('user', {
+      user:user
+    });
+  });
+});
+
 //another page (route)
 app.get('/other/page', function(req, res){
   res.render('extra', {
