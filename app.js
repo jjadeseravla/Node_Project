@@ -1,20 +1,38 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var path = require('path');
-var expressValidator = require('express-validator');
-var mongojs = require('mongojs');
-var db = mongojs('projectnode', ['users'])
-var ObjectId = mongojs.ObjectId;
+const express = require('express');
+const bodyParser = require('body-parser');
+const path = require('path');
+const expressValidator = require('express-validator');
+//const mongojs = require('mongojs');
+//const db = mongojs('projectnode', ['users'])
+const mongoose = require('mongoose');
+const ObjectId = mongoose.ObjectId;
 
-var app = express();
+
+mongoose.connect('mongodb://localhost/projectnode');
+let db = mongoose.connection;
+
+//check connection
+db.once('open', function(){
+  console.log('Connected to MongoDB');
+});
+
+//check for DB errors
+db.on('error', function(err){
+  console.log(err);
+});
+
+const app = express();
+
+//Bring in Models
+let User = require('./models/user');
 
 //view engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 //body parser middleware
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 
 //set static path
 app.use(express.static(path.join(__dirname, 'public')))
@@ -44,14 +62,20 @@ app.use(expressValidator({
 }));
 
 app.get('/', function(req, res) {
-  db.users.find(function(err, docs){
-    //array for docs in collection
-    //console.log(docs);
-    res.render('index', {
-      //title: 'People',
-      users: docs
-    });
-  })
+  User.find({}, function(err, users) {
+    if(err){
+      console.log(err);
+    }else {
+      res.render('index', {
+        //title: 'People',
+        users: users
+      });
+    }
+  });
+  // db.users.find(function(err, docs){
+  //   //array for docs in collection
+  //   //console.log(docs);
+  // })
 });
 
 //another page (route)
@@ -73,19 +97,31 @@ app.post('/users/add', function(req, res) {
       errors: errors
     });
   } else {
-    var newUser = {
-      name: req.body.name,
-      email: req.body.email,
-      country: req.body.country
-    }
-    db.users.insert(newUser, function(err, result){
+    let user = new User();
+    user.name = req.body.name;
+    user.email = req.body.email;
+    user.country = req.body.country;
+    user.save(function(err){
       if(err){
         console.log(err);
-      }
-        //res.render(newUser);
+        return;
+      } else {
         res.redirect('/');
-
-    })
+      }
+    });
+    // var newUser = {
+    //   name: req.body.name,
+    //   email: req.body.email,
+    //   country: req.body.country
+    //}
+    // db.users.insert(newUser, function(err, result){
+    //   if(err){
+    //     console.log(err);
+    //   }
+    //     //res.render(newUser);
+    //     res.redirect('/');
+    //
+    // })
   }
 });
 
