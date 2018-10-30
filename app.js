@@ -1,7 +1,9 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const path = require('path');
+const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
+const flash = require('connect-flash');
+const session = require('express-session');
 //const mongojs = require('mongojs');
 //const db = mongojs('projectnode', ['users'])
 const mongoose = require('mongoose');
@@ -43,7 +45,21 @@ app.use(function(req, res, next){
   next();
 });
 
-//express validator middleware
+// //Express Session Middleware
+// app.user(session({
+//   secret: 'keyboard cat',
+//   resave: true, //resave forces session to be resaved back to session store, even if session wasnt modified during request
+//   saveUninitialized: true, //forces session that uninitialized to be saved to store even if have not been modified
+// }));
+
+//Express Messages Middleware sets a gloabl var called messages to express messages module
+// app.use(require('connect-flash')());
+// app.use(function(req, res, next){
+//   res.locals.messages = require('express-messages')(req, res);
+//   next();
+// });
+
+//Express validator Middleware
 app.use(expressValidator({
   errorFormatter: function(param, msg, value) {
       var namespace = param.split('.')
@@ -61,6 +77,7 @@ app.use(expressValidator({
   }
 }));
 
+//Home route
 app.get('/', function(req, res) {
   User.find({}, function(err, users) {
     if(err){
@@ -78,125 +95,9 @@ app.get('/', function(req, res) {
   // })
 });
 
-//get single users
-app.get('/user/:id', function(req, res){
-  User.findById(req.params.id, function(err, user) { //in brackets to get id thats in URL use req.params
-    res.render('user', {
-      user:user
-    });
-  });
-});
-
-//another page (route)
-app.get('/other/page', function(req, res){
-  res.render('extra', {
-    title: 'Extra Page'
-  });
-});
-
-app.post('/users/add', function(req, res) {
-
-  req.checkBody('name', 'name is required').notEmpty();
-  req.checkBody('email', 'email is required').notEmpty();
-  req.checkBody('country', 'country is required').notEmpty();
-
-  var errors = req.validationErrors();
-  if(errors){
-    res.render('index', {
-      errors: errors
-    });
-  } else {
-    let user = new User();
-    user.name = req.body.name;
-    user.email = req.body.email;
-    user.country = req.body.country;
-    user.save(function(err){
-      if(err){
-        console.log(err);
-        return;
-      } else {
-        res.redirect('/');
-      }
-    });
-    // var newUser = {
-    //   name: req.body.name,
-    //   email: req.body.email,
-    //   country: req.body.country
-    //}
-    // db.users.insert(newUser, function(err, result){
-    //   if(err){
-    //     console.log(err);
-    //   }
-    //     //res.render(newUser);
-    //     res.redirect('/');
-    //
-    // })
-  }
-});
-
-//Load edit form
-app.get('/user/edit/:id', function(req, res){
-  User.findById(req.params.id, function(err, user) { //in brackets to get id thats in URL use req.params
-    res.render('edit_user', {
-      title: 'Edit User',
-      user:user
-    });
-  });
-});
-
-//Update submit post route
-app.post('/user/edit/:id', function(req, res) {
-  // req.checkBody('name', 'name is required').notEmpty();
-  // req.checkBody('email', 'email is required').notEmpty();
-  // req.checkBody('country', 'country is required').notEmpty();
-  //
-  // var errors = req.validationErrors();
-  // if(errors){
-  //   res.render('index', {
-  //     errors: errors
-  //   });
-  // } else {
-
-    let user = {};
-
-    //let user = new User();
-    user.name = req.body.name;
-    user.email = req.body.email;
-    user.country = req.body.country;
-
-    let query = {_id:req.params.id}
-
-    User.update(query, user, function(err){
-      if(err){
-        console.log(err);
-        return;
-      } else {
-        console.log(User);
-        res.redirect('/');
-      }
-    });
-  //}
-});
-
-app.delete('/users/delete/:id', function(req, res){
-  let query =  {_id:req.params.id}
-
-  User.remove(query, function(err){
-    if(err){
-      console.log(err);
-    }
-    res.send('Sent a 200 status so its ok');
-    console.log('WHEREEEEEEEEE DELEEEEEEETTEEEEEE');
-  });
-});
-// app.delete('/users/delete/:id', function(req, res) {
-//   db.users.remove({_id: ObjectId(req.params.id)}, function(err){
-//     if(err) {
-//       console.log(err);
-//     }
-//     res.redirect('/');
-//   });
-// })
+//Router Files
+let users = require('./routes/users');
+app.use('/users', users);
 
 app.listen(3000, function() {
   console.log('server started on port 3000...');

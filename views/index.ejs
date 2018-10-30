@@ -43,8 +43,9 @@
 
     <ul class="list-group">
     <% users.forEach(function(user){ %>
+
       <li class ="list-group-item">
-      <a href="/user/<%=user._id%>" class="individual" data-id="<%=user._id%>">Person</a>
+      <a href="/users/<%=user._id%>" class="individual" data-id="<%=user._id%>">Person</a>
 
       <!-- <a href="/user/<%=user._id%>" class="individual" data-id="<%=user._id%>"><% for(var i = 0; i < users.length; i++) { %>
 
