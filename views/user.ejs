@@ -1,5 +1,12 @@
-<h1><%=user.name%></h1>
+<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css">
 
-<h3><%=user.email%></h3>
+<div class="container">
+  <h1><%=user.name%></h1>
 
-<h3><%=user.country%></h3>
+  <h3><%=user.email%></h3>
+
+  <h3><%=user.country%></h3>
+
+  <hr>
+  <a href="/user/edit/<%=user._id%>" class="btn-lg">Edit</a>
+</div>

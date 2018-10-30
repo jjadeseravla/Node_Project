@@ -134,14 +134,69 @@ app.post('/users/add', function(req, res) {
   }
 });
 
-app.delete('/users/delete/:id', function(req, res) {
-  db.users.remove({_id: ObjectId(req.params.id)}, function(err){
-    if(err) {
+//Load edit form
+app.get('/user/edit/:id', function(req, res){
+  User.findById(req.params.id, function(err, user) { //in brackets to get id thats in URL use req.params
+    res.render('edit_user', {
+      title: 'Edit User',
+      user:user
+    });
+  });
+});
+
+//Update submit post route
+app.post('/user/edit/:id', function(req, res) {
+  // req.checkBody('name', 'name is required').notEmpty();
+  // req.checkBody('email', 'email is required').notEmpty();
+  // req.checkBody('country', 'country is required').notEmpty();
+  //
+  // var errors = req.validationErrors();
+  // if(errors){
+  //   res.render('index', {
+  //     errors: errors
+  //   });
+  // } else {
+
+    let user = {};
+
+    //let user = new User();
+    user.name = req.body.name;
+    user.email = req.body.email;
+    user.country = req.body.country;
+
+    let query = {_id:req.params.id}
+
+    User.update(query, user, function(err){
+      if(err){
+        console.log(err);
+        return;
+      } else {
+        console.log(User);
+        res.redirect('/');
+      }
+    });
+  //}
+});
+
+app.delete('/users/delete/:id', function(req, res){
+  let query =  {_id:req.params.id}
+
+  User.remove(query, function(err){
+    if(err){
       console.log(err);
     }
-    res.redirect('/');
+    res.send('Sent a 200 status so its ok');
+    console.log('WHEREEEEEEEEE DELEEEEEEETTEEEEEE');
   });
-})
+});
+// app.delete('/users/delete/:id', function(req, res) {
+//   db.users.remove({_id: ObjectId(req.params.id)}, function(err){
+//     if(err) {
+//       console.log(err);
+//     }
+//     res.redirect('/');
+//   });
+// })
 
 app.listen(3000, function() {
   console.log('server started on port 3000...');
