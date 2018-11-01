@@ -108,5 +108,6 @@ app.listen(3000, function() {
   console.log('server started on port 3000...');
 })
 
+module.exports = app;
 // module.exports = app.listen(3000);
 //if(!module.parent){ app.listen(3000); }

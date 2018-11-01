@@ -35,13 +35,40 @@ describe('Users', () => {
   describe('/GET user', () => {
       it('it should GET all the users', (done) => {
         chai.request(server)
-            .get('/user')
+            .get('/')
             .end((err, res) => {
                   res.should.have.status(200);
-                  res.body.should.be.a('array');
+                  res.body.should.be.a('object');
+                  //res.body.length.should.be.eql(0);
+                  res.body.should.be.empty
               done();
             });
       });
   });
 
+  /*
+  * Test the /POST route
+  */
+
+  describe('/POST user', () => {
+        it('it should not POST a user without name field', (done) => {
+            let user = {
+                // name: "Abi Travers",
+                email: "abi@gmail.com",
+                country: "UK"
+            }
+            chai.request(server)
+           .post('/user')
+           .send(user)
+           .end((err, res) => {
+                 res.should.have.status(200);
+                 res.body.should.be.a('object');
+                 res.body.should.have.property('errors');
+                 res.body.errors.should.have.property('name');
+                 res.body.errors.pages.should.have.property('kind').eql('required');
+             done();
+           });
+     });
+
+ });
 });
