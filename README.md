@@ -24,3 +24,7 @@ You can insert a user manually:
 
 To list them do:
 7. ´´´$ db.users.find().pretty()´´´
+
+
+## To Test:
+´´´$ ./node_modules/.bin/mocha´´´

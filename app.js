@@ -4,13 +4,18 @@ const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 const flash = require('connect-flash');
 const session = require('express-session');
+const config = require('config');//we load the db location from the JSON files
 //const mongojs = require('mongojs');
 //const db = mongojs('projectnode', ['users'])
 const mongoose = require('mongoose');
 const ObjectId = mongoose.ObjectId;
 
+const testing = config.util.getEnv('NODE_ENV');
+console.log(testing);
 
-mongoose.connect('mongodb://localhost/projectnode');
+//mongoose.connect('mongodb://localhost/projectnode');
+mongoose.connect(config.DBHost);
+//console.log(config);
 let db = mongoose.connection;
 
 //check connection
@@ -102,3 +107,6 @@ app.use('/users', users);
 app.listen(3000, function() {
   console.log('server started on port 3000...');
 })
+
+// module.exports = app.listen(3000);
+//if(!module.parent){ app.listen(3000); }

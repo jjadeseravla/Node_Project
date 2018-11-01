@@ -28,10 +28,12 @@ router.post('/add', function(req, res) {
 
   //get errors if any
   let errors = req.validationErrors();
+  let users = {};
 
   if(errors){
     res.render('index', {
-      errors: errors
+      errors: errors,
+      users: users
     });
   } else {
     let user = new User();
@@ -86,7 +88,8 @@ router.post('/edit/:id', function(req, res) {
   //   });
   // } else {
 
-    let user = {};
+    let user = {}; //User.find({}, function(err, users) {
+      //grAB USERS PLURAL FROM APP..JS AND MAKE 
 
     //let user = new User();
     user.name = req.body.name;
