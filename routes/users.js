@@ -4,6 +4,7 @@ const router = express.Router();
 //Bring in User Models
 let User = require('../models/user');
 
+
 //get single users
 router.get('/:id', function(req, res){
   User.findById(req.params.id, function(err, user) { //in brackets to get id thats in URL use req.params
@@ -22,6 +23,8 @@ router.get('/other/page', function(req, res){
 
 router.post('/add', function(req, res) {
 
+console.log("**********!!!!!!!!!!!!!************");
+
   req.checkBody('name', 'name is required').notEmpty();
   req.checkBody('email', 'email is required').notEmpty();
   req.checkBody('country', 'country is required').notEmpty();
@@ -31,11 +34,13 @@ router.post('/add', function(req, res) {
   let users = {};
 
   if(errors){
+    console.log("**********!!!!!!ONEEEEEE!!!!!!!************");
     res.render('index', {
       errors: errors,
       users: users
     });
   } else {
+    console.log("**********!!!!!!TWOOOO!!!!!!!************");
     let user = new User();
     user.name = req.body.name;
     user.email = req.body.email;
@@ -43,9 +48,11 @@ router.post('/add', function(req, res) {
 
     user.save(function(err){
       if(err){
+        console.log("**************THREEEEE******************");
         console.log(err);
         return;
       } else {
+        console.log("**********!!!!!!FOURRRRR!!!!!!!************");
         res.redirect('/');
       }
     });
@@ -89,7 +96,7 @@ router.post('/edit/:id', function(req, res) {
   // } else {
 
     let user = {}; //User.find({}, function(err, users) {
-      //grAB USERS PLURAL FROM APP..JS AND MAKE 
+      //grAB USERS PLURAL FROM APP..JS AND MAKE
 
     //let user = new User();
     user.name = req.body.name;

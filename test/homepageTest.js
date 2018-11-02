@@ -32,85 +32,95 @@ describe('Users', () => {
 /*
   * Test the /GET route
   */
-  describe('/GET user', () => {
-      it('it should GET all the users', (done) => {
-        chai.request(server)
-            .get('/')
-            .end((err, res) => {
-                  res.should.have.status(200);
-                  res.body.should.be.a('object');
-                  //res.body.should.be.eql({});
-                  res.body.should.be.empty
-              done();
-            });
-      });
-  });
+  // describe('/GET user', () => {
+  //     it('it should GET all the users', (done) => {
+  //       chai.request(server)
+  //           .get('/')
+  //           .end((err, res) => {
+  //                 res.should.have.status(200);
+  //                 res.body.should.be.a('object');
+  //                 //res.body.should.be.eql({});
+  //                 res.body.should.be.empty
+  //             done();
+  //           });
+  //     });
+  // });
 
   /*
   * Test the /POST route
   */
-
+  //
   describe('/POST user', () => {
-        it('it should not POST a user without name field', (done) => {
-            let user = {
-                // name: "Abi Travers",
-                email: "abi@gmail.com",
-                country: "UK"
-            }
-            chai.request(server)
-           .post('/users/add')
-           .send(user) //we send the user along with the POST request by the .send() function.
-           .end((err, res) => {
-                 res.should.have.status(200);
-                 res.body.should.be.a('object');
-                 res.body.should.have.property('errors');
-                 res.body.errors.should.have.property('name');
-                 //res.body.errors.pages.should.have.property('kind').eql('required');
-             done();
-           });
-     });
+  //       it('it should not POST a user without name field', (done) => {
+  //           let user = {
+  //               // name: "Abi Travers",
+  //               email: "abi@gmail.com",
+  //               country: "UK"
+  //           }
+  //           chai.request(server)
+  //          .post('/users/add')
+  //          .send(user) //we send the user along with the POST request by the .send() function.
+  //          .end((err, res) => {
+  //                res.should.have.status(200);
+  //                res.body.should.be.a('object');
+  //                res.body.should.have.property('errors');
+  //                res.body.errors.should.have.property('name');
+  //                //res.body.errors.pages.should.have.property('kind').eql('required');
+  //            done();
+  //          });
+  //    });
 
      it('should POST a user', (done) => {
-       let user = {
-         name: "Jade Alvares",
-         email: "jade@hotmail.com",
-         country: "England"
-       }
+      //  let user = {
+      //    name: "Jade Alvares",
+      //    email: "jade@hotmail.com",
+      //    country: "England"
+      //  }
+      let user = new User({ name: "Sofia", email: "sofia@gmail.com", country: "Iran"});
       chai.request(server)
        .post('/users/add')
        .send(user)
        .end((err, res) => {
+
          res.should.have.status(200);
-         res.body.should.be.a('object');
-         //res.body.should.have.property('message').eql('User successfully added!');
+         res.text.should.contain("Sofia");
+         User.find({}, function(err, users) {
+
+             users[0].name.should.equal('Sofia');
+             done();
+             });
+
+
+        //  res.body.should.be.a('object');
+        //  //res.body.should.have.property('message').eql('User successfully added!');
         // res.body.should.have.property('name');
-        // res.body.should.have.property('email');
-        // res.body.should.have.property('country');
-        // res.body[0].name.should.be.a('string');
-           res.body[0].name.should.equal('Jade Alvares');
-         done();
+        // // res.body.should.have.property('email');
+        // // res.body.should.have.property('country');
+        //
+        // res.body.name.should.be.a('string');
+        //    //res.body.name.should.equal('Jade Alvares');
         });
      });
    });
 
-   describe('/GET/:id user', () => {
-    it('it should GET a user by the given id', (done) => {
-        let user = new User({ name: "Ben", email: "ben@yahoo.com", country: "Egypt"});
-        user.save((err, user) => {
-          chai.request(server)
-            .get('/users/' + user.id)
-            .send(user)
-            .end((err, res) => {
-              res.should.have.status(200);
-              res.body.should.be.a('object');
-              // res.body.should.have.property('name');
-              // res.body.should.have.property('email');
-              // res.body.should.have.property('country');
-              res.body.should.have.property('_id').eql(user.id);
-            done();
-          });
-        });
-
-    });
-});
+  //  describe('/GET/:id user', () => {
+  //   it('it should GET a user by the given id', (done) => {
+  //       let user = new User({ name: "Ben", email: "ben@yahoo.com", country: "Egypt"});
+  //       user.save((err, user) => {
+  //         chai.request(server)
+  //           .get('/users/' + user.id)
+  //           .send(user)
+  //           .end((err, res) => {
+  //             res.should.have.status(200);
+  //             res.body.should.be.a('object');
+  //             res.body.should.have.property('name');
+  //             // res.body.should.have.property('email');
+  //             // res.body.should.have.property('country');
+  //             res.body.should.have.property('_id').eql(user.id);
+  //           done();
+  //         });
+  //       });
+   //
+  //   });
+//});
 });
