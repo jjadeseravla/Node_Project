@@ -39,7 +39,7 @@ describe('Users', () => {
             .end((err, res) => {
                   res.should.have.status(200);
                   res.body.should.be.a('object');
-                  //res.body.length.should.be.eql(0);
+                  //res.body.should.be.eql({});
                   res.body.should.be.empty
               done();
             });
@@ -58,17 +58,59 @@ describe('Users', () => {
                 country: "UK"
             }
             chai.request(server)
-           .post('/user')
-           .send(user)
+           .post('/users/add')
+           .send(user) //we send the user along with the POST request by the .send() function.
            .end((err, res) => {
                  res.should.have.status(200);
                  res.body.should.be.a('object');
                  res.body.should.have.property('errors');
                  res.body.errors.should.have.property('name');
-                 res.body.errors.pages.should.have.property('kind').eql('required');
+                 //res.body.errors.pages.should.have.property('kind').eql('required');
              done();
            });
      });
 
- });
+     it('should POST a user', (done) => {
+       let user = {
+         name: "Jade Alvares",
+         email: "jade@hotmail.com",
+         country: "England"
+       }
+      chai.request(server)
+       .post('/users/add')
+       .send(user)
+       .end((err, res) => {
+         res.should.have.status(200);
+         res.body.should.be.a('object');
+         //res.body.should.have.property('message').eql('User successfully added!');
+        // res.body.should.have.property('name');
+        // res.body.should.have.property('email');
+        // res.body.should.have.property('country');
+        // res.body[0].name.should.be.a('string');
+           res.body[0].name.should.equal('Jade Alvares');
+         done();
+        });
+     });
+   });
+
+   describe('/GET/:id user', () => {
+    it('it should GET a user by the given id', (done) => {
+        let user = new User({ name: "Ben", email: "ben@yahoo.com", country: "Egypt"});
+        user.save((err, user) => {
+          chai.request(server)
+            .get('/users/' + user.id)
+            .send(user)
+            .end((err, res) => {
+              res.should.have.status(200);
+              res.body.should.be.a('object');
+              // res.body.should.have.property('name');
+              // res.body.should.have.property('email');
+              // res.body.should.have.property('country');
+              res.body.should.have.property('_id').eql(user.id);
+            done();
+          });
+        });
+
+    });
+});
 });
