@@ -87,6 +87,8 @@ describe('Users', () => {
          User.find({}, function(err, users) {
 
              users[0].name.should.equal('Sofia');
+             users[0].email.should.equal('sofia@gmail.com');
+             users[0].country.should.equal('Iran');
              done();
              });
 
