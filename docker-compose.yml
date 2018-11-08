@@ -1,0 +1,10 @@
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+     - "49160:3000"
+    links:
+     - "mongo"
+  mongo:
+    image: "mongo:4.1.4"
